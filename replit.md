@@ -21,6 +21,11 @@ Zen Timer is a beautifully crafted meditation application that combines simple c
 - **Box Breathing** - 4-4-4-4 pattern used by Navy SEALs for focus and stress management
 - **4-7-8 Breathing** - Dr. Andrew Weil's relaxation technique for sleep and anxiety relief
 - **Cyclic Sighing** - Stanford-backed technique with double inhale and long exhale for rapid stress relief
+- **Diaphragmatic Breathing** - Deep belly breathing for relaxation and stress reduction
+- **Alternate Nostril** - Traditional yogic breathing (Nadi Shodhana) for balance and calm
+
+**Guided Meditation:**
+- **Body Scan** - Progressive body awareness meditation with timed intervals through 8 body regions
 
 ### Core Functionality
 
@@ -29,6 +34,9 @@ Zen Timer is a beautifully crafted meditation application that combines simple c
 - **Audio Cues** - Gentle sine wave tones for session start, phase transitions, and completion
 - **Timer Controls** - Start, Pause, Resume, Reset with consistent button styling
 - **Cycle Tracking** - Progress indicators for breathing exercises
+- **Session History** - PostgreSQL database tracking with practice streaks and statistics
+- **Custom Preset Builder** - Create personalized meditation timers with custom durations and breathing patterns
+- **Ambient Background Sounds** - Optional nature sounds (rain, ocean, forest) with volume control
 - **Responsive Design** - Works beautifully on mobile and desktop
 
 ## Architecture
@@ -42,15 +50,20 @@ Zen Timer is a beautifully crafted meditation application that combines simple c
 
 ### Backend
 - Express.js server
-- In-memory storage for user preferences
-- Minimal API (preferences endpoint)
+- PostgreSQL database (Neon-backed) for session history and custom presets
+- Drizzle ORM for type-safe database operations
+- RESTful API endpoints for sessions and custom presets
 
 ### Key Components
 - `CircularTimer` - Main timer display with progress ring
 - `BreathingVisualizer` - Phase-synchronized animations (box or circle)
 - `PresetCard` - Grid cards for preset selection
 - `TimerControls` - Unified control buttons
+- `SessionHistory` - Statistics dashboard with practice streaks
+- `PresetBuilder` - Form for creating custom meditation presets
+- `AmbientSoundControl` - Audio playback controls for nature sounds
 - `useTimer` - Custom hook managing countdown and breathing phases
+- `useAmbientSound` - Custom hook for ambient audio playback
 
 ## Design Philosophy
 
@@ -72,6 +85,13 @@ The app follows a hyper-minimalist zen aesthetic with:
 - Configured zen design system with proper typography hierarchy
 - Fixed button sizing to use shadcn variants correctly
 - Synchronized breathing visualizer with actual phase timing
+
+### Next-Phase Features (Completed)
+- **Session History Tracking** - PostgreSQL database with sessions table, API endpoints for saving/retrieving completed sessions, statistics dashboard showing total sessions, minutes practiced, current streak, and best streak
+- **Additional Breathing Techniques** - Added diaphragmatic breathing (4-6-4 pattern) and alternate nostril breathing (4-4-4-4 pattern with nostril switching instructions)
+- **Guided Body Scan Meditation** - 15-minute progressive body awareness meditation with 8 timed intervals (feet, legs, hips, abdomen, chest, arms, neck, head)
+- **Customizable Preset Builder** - Complete UI for creating custom meditation presets with configurable name, description, type, duration, breathing intervals, and cycles - all saved to PostgreSQL
+- **Ambient Background Sounds** - Three nature soundscapes (rain, ocean waves, forest ambience) with volume control, auto-pause during active sessions, seamless playback integration
 
 ## User Preferences
 
@@ -110,18 +130,20 @@ End-to-end tests verify:
 - Breathing phase transitions and visualizations
 - Cycle tracking for breathing exercises
 - Audio cue playback
+- Session history tracking and statistics
+- Custom preset creation, deletion, and usage
+- Ambient sound controls and playback
 - Responsive layout and accessibility
 
 ## Future Enhancements
 
 Potential additions:
-- Session history tracking
-- Practice streaks
-- Additional breathing techniques (diaphragmatic, alternate nostril)
-- Guided body scan meditation
-- Customizable preset builder
-- Optional ambient background sounds
 - Dark mode toggle (currently follows system preference)
+- Export session history data
+- Social sharing of meditation achievements
+- Additional guided meditations
+- Customizable audio cues
+- Mobile app version
 
 ## Development
 
