@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { type MeditationPreset, type BreathingPhase } from "@shared/schema";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 
 interface UseTimerOptions {
   preset: MeditationPreset;
@@ -121,6 +122,24 @@ export function useTimer({ preset, onComplete }: UseTimerOptions) {
               intervalRef.current = null;
             }
             playSound(660, 500);
+            
+            // Save completed session to database
+            const sessionData = {
+              presetId: preset.id,
+              presetName: preset.name,
+              presetType: preset.type,
+              duration: preset.duration,
+            };
+            
+            apiRequest("POST", "/api/sessions", sessionData)
+              .then(() => {
+                queryClient.invalidateQueries({ queryKey: ["/api/sessions"] });
+                queryClient.invalidateQueries({ queryKey: ["/api/sessions/stats"] });
+              })
+              .catch((error) => {
+                console.error("Failed to save session:", error);
+              });
+            
             setTimeout(() => onComplete(), 500);
             return { ...prev, timeRemaining: 0, isActive: false };
           }

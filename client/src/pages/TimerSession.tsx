@@ -1,7 +1,10 @@
+import { useEffect } from "react";
 import { CircularTimer } from "@/components/CircularTimer";
 import { TimerControls } from "@/components/TimerControls";
 import { BreathingVisualizer } from "@/components/BreathingVisualizer";
+import { AmbientSoundControl } from "@/components/AmbientSoundControl";
 import { useTimer } from "@/hooks/useTimer";
+import { useAmbientSound } from "@/hooks/useAmbientSound";
 import { type MeditationPreset } from "@shared/schema";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,10 +24,29 @@ export default function TimerSession({ preset, onBack }: TimerSessionProps) {
     },
   });
 
+  const ambient = useAmbientSound();
+
+  useEffect(() => {
+    if (timer.isActive && !timer.isPaused) {
+      ambient.play();
+    } else {
+      ambient.pause();
+    }
+  }, [timer.isActive, timer.isPaused]);
+
+  useEffect(() => {
+    return () => {
+      ambient.stop();
+    };
+  }, []);
+
   const hasBreathingPattern = preset.intervals && preset.intervals.length > 0;
   const showBoxVisualizer = preset.type === "box_breathing" && timer.isActive;
   const showCircleVisualizer =
-    (preset.type === "breathing_478" || preset.type === "cyclic_sighing") &&
+    (preset.type === "breathing_478" || 
+     preset.type === "cyclic_sighing" || 
+     preset.type === "diaphragmatic" || 
+     preset.type === "alternate_nostril") &&
     timer.isActive;
 
   return (
@@ -99,6 +121,18 @@ export default function TimerSession({ preset, onBack }: TimerSessionProps) {
               <p className="text-xs uppercase tracking-widest text-muted-foreground">
                 Cycle {timer.currentCycle} of {preset.cycles}
               </p>
+            </div>
+          )}
+
+          {!timer.isActive && (
+            <div className="mt-12 w-full">
+              <AmbientSoundControl
+                currentSound={ambient.currentSound}
+                onSoundChange={ambient.setCurrentSound}
+                volume={ambient.volume}
+                onVolumeChange={ambient.setVolume}
+                isPlaying={ambient.isPlaying}
+              />
             </div>
           )}
         </div>
