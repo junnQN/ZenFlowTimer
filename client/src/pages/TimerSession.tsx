@@ -34,7 +34,6 @@ export default function TimerSession({ preset, onBack }: TimerSessionProps) {
           variant="ghost"
           size="icon"
           onClick={timer.isActive ? timer.reset : onBack}
-          className="h-10 w-10"
           data-testid="button-nav-back"
         >
           <ArrowLeft className="w-5 h-5" />

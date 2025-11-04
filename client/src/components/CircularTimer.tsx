@@ -26,7 +26,7 @@ export function CircularTimer({
   isActive,
   isPaused,
 }: CircularTimerProps) {
-  const radius = 120;
+  const radius = 140;
   const strokeWidth = 8;
   const normalizedRadius = radius - strokeWidth / 2;
   const circumference = normalizedRadius * 2 * Math.PI;
@@ -66,9 +66,10 @@ export function CircularTimer({
         
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <div 
-            className={`text-6xl font-extralight tabular-nums tracking-tight ${
+            className={`font-extralight tabular-nums tracking-tight ${
               isPaused ? "animate-pulse-gentle" : ""
             }`}
+            style={{ fontSize: "96px", lineHeight: "1.2" }}
             data-testid="timer-display"
           >
             {formatTime(timeRemaining)}
